@@ -2,7 +2,6 @@ package book101.spring101_v1.security;
 
 import book101.spring101_v1.model.UserEntity;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;

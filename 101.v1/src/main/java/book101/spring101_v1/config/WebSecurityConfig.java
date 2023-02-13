@@ -33,7 +33,12 @@ public class WebSecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/","/auth/**").permitAll()
+                    /**
+                     스프링부트 2.6버전부터 responsebody를 비우고 status만 반환함
+                     responseBody에 error 메시지를 포함하려면 "/error" 추가
+                     https://github.com/spring-projects/spring-boot/issues/28953
+                     */
+                    .antMatchers("/","/auth/**","/error").permitAll()
                 .anyRequest()
                     .authenticated();
 
