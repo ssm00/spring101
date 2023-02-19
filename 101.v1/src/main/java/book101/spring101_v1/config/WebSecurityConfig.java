@@ -1,6 +1,8 @@
 package book101.spring101_v1.config;
 
 import book101.spring101_v1.security.JwtAuthenticationFilter;
+import book101.spring101_v1.security.OAuthSuccessHandler;
+import book101.spring101_v1.security.OAuthUserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ import org.springframework.web.filter.CorsFilter;
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final OAuthUserServiceImpl oAuthUserService;
+    private final OAuthSuccessHandler oAuthSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -38,9 +42,18 @@ public class WebSecurityConfig {
                      responseBody에 error 메시지를 포함하려면 "/error" 추가
                      https://github.com/spring-projects/spring-boot/issues/28953
                      */
-                    .antMatchers("/","/auth/**","/error").permitAll()
+                    .antMatchers("/","/auth/**","/oauth2/**","/error").permitAll()
                 .anyRequest()
-                    .authenticated();
+                    .authenticated()
+                .and()
+                .oauth2Login()
+                        .redirectionEndpoint()
+                .baseUri("/oauth2/callback/*")
+                .and()
+                        .userInfoEndpoint()
+                                .userService(oAuthUserService)
+                .and()
+                        .successHandler(oAuthSuccessHandler);
 
         //cors필터 이후 실행 설정
         http.addFilterAfter(jwtAuthenticationFilter, CorsFilter.class);

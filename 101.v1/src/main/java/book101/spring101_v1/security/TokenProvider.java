@@ -7,6 +7,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -21,6 +23,17 @@ public class TokenProvider {
     private static final String SECRET_KEY = " c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK";
     private final Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
 
+    public String create(final Authentication authentication) {
+        OAuth2User userPrincipal = (OAuth2User) authentication.getPrincipal();
+        Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.DAYS));
+
+        return Jwts.builder()
+                .setSubject(userPrincipal.getName())
+                .setIssuedAt(new Date())
+                .setExpiration(expiredDate)
+                .signWith(key,SignatureAlgorithm.HS512)
+                .compact();
+    }
 
     public String create(UserEntity userEntity) {
         Date expiryDate = Date.from(

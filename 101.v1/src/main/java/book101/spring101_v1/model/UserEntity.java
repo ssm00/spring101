@@ -24,9 +24,9 @@ public class UserEntity {
     @Column(nullable = false)
     private String username;
 
-    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String password; //패스워드
+
+    private String authProvider;
 }
