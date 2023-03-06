@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-//cors설정하기(cross origin resource sharing 처음 리소스를 제공한 도메인이 현재 요청하려는 도메인과 다르더라고 요청을 허락
+//cors설정하기(cross origin resource sharing 처음 리소스를 제공한 도메인이 현재 요청하려는 도메인과 다르더라도 요청을 허락
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
     private final long MAX_AGE_SECS = 3600;
